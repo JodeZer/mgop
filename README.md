@@ -1,0 +1,1 @@
+a mgo session helper
