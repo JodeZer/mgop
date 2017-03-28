@@ -1,3 +1,5 @@
+# mgop<br> [![GoDoc](https://godoc.org/github.com/JodeZer/mgop?status.svg)](https://godoc.org/github.com/JodeZer/mgop)
+
 a mgo session pool
 still need more work...
 
