@@ -28,6 +28,9 @@ func DialMixedPool(url string, fixedSize int) (SessionPool, error) {
 		return nil, err
 	}
 
+	s.SetMode(mgo.Strong, true)
+	s.SetSafe(&mgo.Safe{})
+
 	p := &StrongSessionPool{}
 	p.m = make(map[mgo.Mode]upstreamSessionPool, 7)
 	for k, v := range modeMap {
@@ -44,9 +47,9 @@ func DialMixedPool(url string, fixedSize int) (SessionPool, error) {
 	for i := 0; i < fixedSize - 1; i++ {
 		scp := s.Copy()
 		scp.SetMode(mgo.Strong, true)
+		scp.SetSafe(&mgo.Safe{})
 		p.m[mgo.Strong].appendSession(newSessionWrapper(p, scp))
 	}
-	s.SetMode(mgo.Strong, true)
 	p.m[mgo.Strong].appendSession(newSessionWrapper(p, s))
 	return p, nil
 }

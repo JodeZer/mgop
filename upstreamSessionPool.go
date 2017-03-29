@@ -28,6 +28,7 @@ func (p *pollingSessionPool)getBest() *sessionWrapper {
 	cur := p.next
 	p.nextMutex.Unlock()
 	//fmt.Printf("get %d\n", cur)
+	p.wrappers[cur].atomicAcquire()
 	return p.wrappers[cur]
 }
 
