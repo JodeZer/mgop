@@ -8,7 +8,7 @@ import (
 
 type sessionWrapper struct {
 	s        *mgo.Session
-	belongTo *SessionPool
+	belongTo SessionPool
 	ref      int32
 	maxRef   int32
 }
@@ -31,7 +31,7 @@ func (sw *sessionWrapper)DB(name string) *mgo.Database {
 	return sw.s.DB(name)
 }
 
-func newSessionWrapper(p *SessionPool, session *mgo.Session) *sessionWrapper {
+func newSessionWrapper(p SessionPool, session *mgo.Session) *sessionWrapper {
 	return &sessionWrapper{
 		s :session,
 		belongTo:p,
