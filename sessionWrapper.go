@@ -2,7 +2,6 @@ package mgop
 
 import (
 	"gopkg.in/mgo.v2"
-
 	"sync/atomic"
 )
 
@@ -11,6 +10,7 @@ type sessionWrapper struct {
 	belongTo SessionPool
 	ref      int32
 	maxRef   int32
+	host     string // which host the session is connect to
 }
 
 func (sw *sessionWrapper) Release() {
@@ -31,10 +31,28 @@ func (sw *sessionWrapper)DB(name string) *mgo.Database {
 	return sw.s.DB(name)
 }
 
+// if a reset happen ,return true else return false
+func (sw *sessionWrapper)refreshIfNotMaster() bool {
+	result := &isMasterResult{}
+	sw.s.Run("ismaster", result)
+	if result.IsMaster {
+		return false
+	}
+	sw.s.Refresh()
+	return true
+}
+
+func (sw *sessionWrapper)refresh() {
+	sw.s.Refresh()
+	sw.s.Ping()
+}
+
 func newSessionWrapper(p SessionPool, session *mgo.Session) *sessionWrapper {
-	return &sessionWrapper{
+
+	sess := &sessionWrapper{
 		s :session,
 		belongTo:p,
 		ref:0,
 	}
+	return sess
 }
