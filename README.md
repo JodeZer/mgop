@@ -22,7 +22,7 @@ mgop helps mongo doing better in high concurrency situation by buffering some so
 
 ```go
 func foo(){
-  p, _ := mgop.DialPool("127.0.0.1:27017", 5, 5)
+  p, _ := mgop.DialPool("127.0.0.1:27017", 5)
   session := p.AcquireSession()
   defer session.Release()
   session.DB("test").C("test").Insert(bson.M{"id":1})
