@@ -104,7 +104,7 @@ func (p *StrongSessionPool)pinger() {
 			//refresh the session
 			//TODO ismaster is less quick than ping;may a hash for host will work
 			var result isMasterResult
-			if err := sw.s.Run("ismaster", &result); err != nil || result.IsMaster {
+			if err := sw.s.Run("ismaster", &result); err != nil || !result.IsMaster {
 				sw.refresh()
 			}
 
