@@ -97,8 +97,7 @@ func (p *StrongSessionPool) Size() int {
 func (p *StrongSessionPool)pinger() {
 	for {
 
-		time.Sleep(5 * time.Second)
-		p.rw.Lock()
+		time.Sleep(15 * time.Second)
 		p.poolmap[mgo.Strong].foreach(func(sw *sessionWrapper) {
 			//if session preserved socket is gone or not master,
 			//refresh the session
@@ -109,7 +108,6 @@ func (p *StrongSessionPool)pinger() {
 			}
 
 		}, true)
-		p.rw.Unlock()
 
 	}
 }
